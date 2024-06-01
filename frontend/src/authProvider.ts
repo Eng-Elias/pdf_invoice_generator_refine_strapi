@@ -1,21 +1,27 @@
-import { AuthBindings } from "@refinedev/core";
+import { AuthProvider } from "@refinedev/core";
 import { AuthHelper } from "@refinedev/strapi-v4";
-import axios from "axios";
+
 import { API_URL, TOKEN_KEY } from "./constants";
 
-export const axiosInstance = axios.create();
-const strapiAuthHelper = AuthHelper(API_URL + "/api");
+import axios from "axios";
 
-export const authProvider: AuthBindings = {
+export const axiosInstance = axios.create();
+const strapiAuthHelper = AuthHelper(`${API_URL}/api`);
+
+export const authProvider: AuthProvider = {
   login: async ({ email, password }) => {
     const { data, status } = await strapiAuthHelper.login(email, password);
     if (status === 200) {
       localStorage.setItem(TOKEN_KEY, data.jwt);
+      // localStorage.setItem(TOKEN_KEY, TOKEN_KEY);
 
       // set header axios instance
       axiosInstance.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${data.jwt}`;
+      // axiosInstance.defaults.headers.common[
+      //   "Authorization"
+      // ] = `Bearer ${TOKEN_KEY}`;
 
       return {
         success: true,
@@ -24,10 +30,7 @@ export const authProvider: AuthBindings = {
     }
     return {
       success: false,
-      error: {
-        message: "Login failed",
-        name: "Invalid email or password",
-      },
+      error: new Error("Invalid username or password"),
     };
   },
   logout: async () => {
@@ -38,7 +41,12 @@ export const authProvider: AuthBindings = {
     };
   },
   onError: async (error) => {
-    console.error(error);
+    if (error.response?.status === 401) {
+      return {
+        logout: true,
+      };
+    }
+
     return { error };
   },
   check: async () => {
@@ -54,10 +62,7 @@ export const authProvider: AuthBindings = {
 
     return {
       authenticated: false,
-      error: {
-        message: "Check failed",
-        name: "Token not found",
-      },
+      error: new Error("Not authenticated"),
       logout: true,
       redirectTo: "/login",
     };

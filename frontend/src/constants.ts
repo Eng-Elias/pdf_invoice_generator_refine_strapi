@@ -1,2 +1,3 @@
-export const API_URL = "https://automatic-sweltering-dog.strapiapp.com";
-export const TOKEN_KEY = "strapi-jwt-token";
+export const API_URL = "http://localhost:1337";
+export const TOKEN_KEY =
+  "b467ab904b84ec03ca2eedeb2a832e915f2e66349dea88bdab6cd3041b3d6ef2765fe7236475738b7429579f286a586b3f3d1a00b76e4908143e492c8cf13535d2bb74c62b358fa2e5fc09053d48e510e5aab5c2300a73cf74e8f61dbfc0b891505040c2990849b7f789718d6ebd3ae571c1b7bc9a630e394d66a6a074864895";

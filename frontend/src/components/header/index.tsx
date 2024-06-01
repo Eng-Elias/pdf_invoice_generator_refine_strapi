@@ -1,4 +1,4 @@
-import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
+import { useContext } from "react";
 import { useGetIdentity } from "@refinedev/core";
 import {
   Layout as AntdLayout,
@@ -8,11 +8,10 @@ import {
   Typography,
   theme,
 } from "antd";
-import React, { useContext } from "react";
+
 import { ColorModeContext } from "../../contexts/color-mode";
 
 const { Text } = Typography;
-const { useToken } = theme;
 
 type IUser = {
   id: number;
@@ -20,30 +19,26 @@ type IUser = {
   avatar: string;
 };
 
-export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
-  sticky,
-}) => {
+const { useToken } = theme;
+export const Header: React.FC = () => {
   const { token } = useToken();
   const { data: user } = useGetIdentity<IUser>();
   const { mode, setMode } = useContext(ColorModeContext);
 
-  const headerStyles: React.CSSProperties = {
-    backgroundColor: token.colorBgElevated,
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    padding: "0px 24px",
-    height: "64px",
-  };
-
-  if (sticky) {
-    headerStyles.position = "sticky";
-    headerStyles.top = 0;
-    headerStyles.zIndex = 1;
-  }
-
   return (
-    <AntdLayout.Header style={headerStyles}>
+    <AntdLayout.Header
+      style={{
+        backgroundColor: token.colorBgElevated,
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        padding: "0px 24px",
+        height: "64px",
+        position: "sticky",
+        top: 0,
+        zIndex: 1,
+      }}
+    >
       <Space>
         <Switch
           checkedChildren="🌛"
@@ -51,7 +46,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
           onChange={() => setMode(mode === "light" ? "dark" : "light")}
           defaultChecked={mode === "dark"}
         />
-        <Space style={{ marginLeft: "8px" }} size="middle">
+        <Space size="middle">
           {user?.name && <Text strong>{user.name}</Text>}
           {user?.avatar && <Avatar src={user?.avatar} alt={user?.name} />}
         </Space>
