@@ -15,6 +15,7 @@ import * as Icons from "@ant-design/icons";
 import { Table, Space, Button, Modal } from "antd";
 
 import { IInvoice, IMission } from "../../interfaces";
+import { PdfLayout } from "../../components/pdf";
 
 const { FilePdfOutlined } = Icons;
 
@@ -31,6 +32,8 @@ export const InvoiceList: React.FC = () => {
       },
     },
   });
+
+  const { show, visible, close } = useModal();
 
   return (
     <>
@@ -96,6 +99,7 @@ export const InvoiceList: React.FC = () => {
                       icon={<FilePdfOutlined />}
                       onClick={() => {
                         setRecord(record);
+                        show();
                       }}
                     />
                   )}
@@ -105,6 +109,9 @@ export const InvoiceList: React.FC = () => {
           />
         </Table>
       </List>
+      <Modal visible={visible} onCancel={close} width="80%" footer={null}>
+        <PdfLayout record={record} />
+      </Modal>
     </>
   );
 };
