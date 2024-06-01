@@ -27,6 +27,8 @@ import { ColorModeContextProvider } from "./contexts/color-mode";
 import { ClientList } from "./pages/clients";
 import { CompanyList } from "./pages/companies";
 import { ContactList, EditContact } from "./pages/contacts";
+import { MissionList } from "./pages/missions";
+import { CreateInvoice, EditInvoice, InvoiceList } from "./pages/invoices";
 
 const {
   UserAddOutlined,
@@ -116,6 +118,14 @@ function App() {
                 <Route path="/contacts">
                   <Route index element={<ContactList />} />
                   <Route path="/contacts/:id/edit" element={<EditContact />} />
+                </Route>
+                <Route path="/missions">
+                  <Route index element={<MissionList />} />
+                </Route>
+                <Route path="/invoices">
+                  <Route index element={<InvoiceList />} />
+                  <Route path="/invoices/create" element={<CreateInvoice />} />
+                  <Route path="/invoices/:id/edit" element={<EditInvoice />} />
                 </Route>
               </Route>
               <Route

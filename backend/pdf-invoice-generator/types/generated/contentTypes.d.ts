@@ -900,6 +900,88 @@ export interface ApiContactContact extends Schema.CollectionType {
   };
 }
 
+export interface ApiInvoiceInvoice extends Schema.CollectionType {
+  collectionName: 'invoices';
+  info: {
+    singularName: 'invoice';
+    pluralName: 'invoices';
+    displayName: 'Invoice';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    date: Attribute.DateTime;
+    company: Attribute.Relation<
+      'api::invoice.invoice',
+      'oneToOne',
+      'api::company.company'
+    >;
+    discount: Attribute.Float;
+    tax: Attribute.Float;
+    custom_id: Attribute.String;
+    contact: Attribute.Relation<
+      'api::invoice.invoice',
+      'oneToOne',
+      'api::contact.contact'
+    >;
+    missions: Attribute.Relation<
+      'api::invoice.invoice',
+      'oneToMany',
+      'api::mission.mission'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::invoice.invoice',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::invoice.invoice',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiMissionMission extends Schema.CollectionType {
+  collectionName: 'missions';
+  info: {
+    singularName: 'mission';
+    pluralName: 'missions';
+    displayName: 'Mission';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    mission: Attribute.String;
+    mission_description: Attribute.String;
+    day: Attribute.Integer;
+    daily_rate: Attribute.Float;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::mission.mission',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::mission.mission',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -921,6 +1003,8 @@ declare module '@strapi/types' {
       'api::client.client': ApiClientClient;
       'api::company.company': ApiCompanyCompany;
       'api::contact.contact': ApiContactContact;
+      'api::invoice.invoice': ApiInvoiceInvoice;
+      'api::mission.mission': ApiMissionMission;
     }
   }
 }
